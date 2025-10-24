@@ -34,7 +34,7 @@ jobs:
         run: flutter config --enable-web
 
       - name: Build Flutter web
-        run: flutter build web --release --web-renderer canvaskit --base-href /unfold_ai_app/
+        run: flutter build web --release --base-href /unfold_ai_app/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
