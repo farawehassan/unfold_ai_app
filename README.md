@@ -10,7 +10,7 @@ A Flutter application that visualizes biometric data with interactive charts, bu
 - **Dark Mode**: Toggle between light and dark themes
 - **Responsive Design**: Works on mobile and web platforms
 - **Error Handling**: Graceful handling of loading, error, and empty states
-- **Journal Annotations**: Visual markers for mood entries
+- **Interactive Details**: Tap charts to view detailed biometric data and journal entries
 
 ## Architecture
 
@@ -29,7 +29,7 @@ This project follows Clean Architecture principles with three main layers:
 ### Presentation Layer (`lib/presentation/`)
 - **BLoC**: State management using flutter_bloc
 - **Pages**: Main dashboard screen
-- **Widgets**: Reusable UI components (charts, selectors, loading states)
+- **Widgets**: Reusable UI components (charts, selectors, loading states, detail cards)
 
 ## Setup Instructions
 

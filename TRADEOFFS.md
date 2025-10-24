@@ -48,12 +48,12 @@ This document outlines the key trade-offs made during the development of the Bio
 
 ### Chart Synchronization
 
-**Decision**: Implemented shared tooltips across all charts
+**Decision**: Implemented shared tooltips and interactive detail cards across all charts
 
 **Trade-offs**:
-- ✅ **Pros**: Better user experience, easier data comparison
+- ✅ **Pros**: Better user experience, easier data comparison, detailed view of selected data points
 - ❌ **Cons**: More complex state management, potential performance impact
-- **Rationale**: Synchronized tooltips are essential for comparing metrics across charts
+- **Rationale**: Interactive detail cards provide comprehensive view of both biometric data and journal entries for selected dates
 
 ### Dark Mode Implementation
 
@@ -115,17 +115,32 @@ This document outlines the key trade-offs made during the development of the Bio
 
 ## Features Cut or Simplified
 
-### Advanced Chart Interactions
+### Chart Metrics Selection
 
-**Cut**: Zoom, pan, and custom date range selection
+**Decision**: Focused on three core biometric metrics (HRV, RHR, Steps)
 
-**Rationale**: Basic range switching (7d/30d/90d) meets requirements while keeping implementation focused
+**Trade-offs**:
+- ✅ **Pros**: Cleaner interface, focused on essential health metrics, better performance
+- ❌ **Cons**: Removed Sleep Score metric
+- **Rationale**: Three core metrics provide comprehensive health overview while maintaining clean UI
 
 ### Journal Entry Visualization
 
-**Simplified**: Basic mood markers without detailed annotations
+**Decision**: Interactive detail cards with comprehensive biometric and mood data display
 
-**Rationale**: Core requirement was chart visualization; journal features were secondary
+**Trade-offs**:
+- ✅ **Pros**: Complete data view, clean horizontal layout, mood correlation with biometrics
+- ❌ **Cons**: More complex UI state management
+- **Rationale**: Detail cards provide better user experience than simple mood markers
+
+### Detail Card Layout Design
+
+**Decision**: Horizontal layout with expanded content area and close button
+
+**Trade-offs**:
+- ✅ **Pros**: Better space utilization, cleaner visual hierarchy, easier to scan information
+- ❌ **Cons**: Less vertical space for journal notes, requires horizontal scrolling on small screens
+- **Rationale**: Horizontal layout provides better information density and modern card design
 
 ### Data Export
 

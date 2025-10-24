@@ -15,7 +15,6 @@ class ChartSectionWidget extends StatelessWidget {
     required this.selectedRange,
     required this.showLargeDataset,
     required this.onTooltipChanged,
-    required this.selectedDate,
     super.key,
   });
 
@@ -38,10 +37,8 @@ class ChartSectionWidget extends StatelessWidget {
   final bool showLargeDataset;
 
   /// The callback to change the tooltip.
-  final ValueChanged<DateTime?> onTooltipChanged;
-
-  /// The selected date.
-  final DateTime? selectedDate;
+  final void Function(BiometricData? biometricData, JournalEntry? journalEntry)?
+      onTooltipChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +64,6 @@ class ChartSectionWidget extends StatelessWidget {
               isDarkMode: ThemeCubit().isDarkMode,
               showLargeDataset: showLargeDataset,
               onTooltipChanged: onTooltipChanged,
-              selectedDate: selectedDate,
             ),
           ],
         ),

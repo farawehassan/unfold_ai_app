@@ -18,7 +18,6 @@ class BiometricChart extends StatefulWidget {
     required this.showLargeDataset,
     super.key,
     this.onTooltipChanged,
-    this.selectedDate,
   });
 
   /// The data to display.
@@ -40,10 +39,8 @@ class BiometricChart extends StatefulWidget {
   final bool showLargeDataset;
 
   /// The callback to change the tooltip.
-  final ValueChanged<DateTime?>? onTooltipChanged;
-
-  /// The selected date.
-  final DateTime? selectedDate;
+  final void Function(BiometricData? biometricData, JournalEntry? journalEntry)?
+      onTooltipChanged;
 
   @override
   State<BiometricChart> createState() => _BiometricChartState();
@@ -125,25 +122,12 @@ class _BiometricChartState extends State<BiometricChart> {
                   final date =
                       DateTime.fromMillisecondsSinceEpoch(spot.x.toInt());
 
-                  // Check if this is a journal entry marker
-                  final journalEntry = _getJournalEntryForDate(date);
-                  if (journalEntry != null) {
-                    return LineTooltipItem(
-                      '${_formatDate(date)}\n'
-                      'Mood: ${journalEntry.mood}/5\n'
-                      '${journalEntry.note}',
-                      TextStyle(
-                        color: widget.isDarkMode ? Colors.white : Colors.black,
-                        fontSize: 12,
-                      ),
-                    );
-                  }
-
-                  // Regular biometric data tooltip
-                  // Defer the callback to avoid setState during paint
                   if (widget.onTooltipChanged != null) {
                     SchedulerBinding.instance.addPostFrameCallback((_) {
-                      widget.onTooltipChanged!(date);
+                      widget.onTooltipChanged!(
+                        _getBiometricDataForDate(date),
+                        _getJournalEntryForDate(date),
+                      );
                     });
                   }
 
@@ -472,9 +456,18 @@ class _BiometricChartState extends State<BiometricChart> {
         return '${rounded.toStringAsFixed(
           rounded == rounded.roundToDouble() ? 0 : 1,
         )}k';
-      case ChartMetric.sleepScore:
-        return value.round().toString();
     }
+  }
+
+  /// Get biometric data for a specific date
+  BiometricData? _getBiometricDataForDate(DateTime date) {
+    final dateString = DateFormat('yyyy-MM-dd').format(date);
+    return widget.data
+        .where(
+          (entry) => entry.date == dateString,
+        )
+        .toList()
+        .firstOrNull;
   }
 
   /// Get the bottom interval for the chart.
@@ -500,8 +493,6 @@ class _BiometricChartState extends State<BiometricChart> {
         return Colors.red;
       case ChartMetric.steps:
         return Colors.green;
-      case ChartMetric.sleepScore:
-        return Colors.purple;
     }
   }
 
@@ -514,8 +505,6 @@ class _BiometricChartState extends State<BiometricChart> {
         return 5;
       case ChartMetric.steps:
         return 1000;
-      case ChartMetric.sleepScore:
-        return 10;
     }
   }
 
@@ -539,8 +528,6 @@ class _BiometricChartState extends State<BiometricChart> {
         return 5;
       case ChartMetric.steps:
         return 1000;
-      case ChartMetric.sleepScore:
-        return 10;
     }
   }
 
@@ -558,8 +545,6 @@ class _BiometricChartState extends State<BiometricChart> {
         return (max * 1.1).clamp(50, 80);
       case ChartMetric.steps:
         return (max * 1.1).clamp(5000, 15000);
-      case ChartMetric.sleepScore:
-        return (max * 1.1).clamp(50, 100);
     }
   }
 
@@ -577,8 +562,6 @@ class _BiometricChartState extends State<BiometricChart> {
         return (min * 0.9).clamp(50, 80);
       case ChartMetric.steps:
         return 0;
-      case ChartMetric.sleepScore:
-        return (min * 0.9).clamp(50, 100);
     }
   }
 

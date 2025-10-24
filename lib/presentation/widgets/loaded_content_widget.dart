@@ -6,6 +6,7 @@ import 'package:unfold_ai_app/domain/entities/biometric_data.dart';
 import 'package:unfold_ai_app/presentation/bloc/dashboard_bloc.dart';
 import 'package:unfold_ai_app/presentation/widgets/chart_section_widget.dart';
 import 'package:unfold_ai_app/presentation/widgets/custom_empty_widget.dart';
+import 'package:unfold_ai_app/presentation/widgets/selected_entry_card.dart';
 
 /// Custom Loaded Content Widget to display when data is loaded.
 class LoadedContentWidget extends HookWidget {
@@ -40,7 +41,9 @@ class LoadedContentWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final scrollController = useScrollController();
-    final selectedDate = useState<DateTime?>(null);
+    final selectedEntry = useState<JournalEntry?>(null);
+    final selectedBiometricData = useState<BiometricData?>(null);
+
     if (biometricData.isEmpty) {
       return const CustomEmptyWidget();
     }
@@ -78,6 +81,18 @@ class LoadedContentWidget extends HookWidget {
           ),
         ),
 
+        // Journal entry card (if date is selected)
+        if (selectedBiometricData.value != null) ...[
+          SelectedEntryCard(
+            biometricData: selectedBiometricData.value!,
+            journalEntry: selectedEntry.value,
+            onClose: () {
+              selectedBiometricData.value = null;
+              selectedEntry.value = null;
+            },
+          ),
+        ],
+
         // Charts
         Expanded(
           child: SingleChildScrollView(
@@ -91,8 +106,10 @@ class LoadedContentWidget extends HookWidget {
                   journalEntries: journalEntries,
                   selectedRange: selectedRange,
                   showLargeDataset: showLargeDataset,
-                  onTooltipChanged: (date) => selectedDate.value = date,
-                  selectedDate: selectedDate.value,
+                  onTooltipChanged: (biometricData, journalEntry) {
+                    selectedBiometricData.value = biometricData;
+                    selectedEntry.value = journalEntry;
+                  },
                 ),
                 ChartSectionWidget(
                   title: 'Resting Heart Rate (RHR)',
@@ -101,8 +118,10 @@ class LoadedContentWidget extends HookWidget {
                   journalEntries: journalEntries,
                   selectedRange: selectedRange,
                   showLargeDataset: showLargeDataset,
-                  onTooltipChanged: (date) => selectedDate.value = date,
-                  selectedDate: selectedDate.value,
+                  onTooltipChanged: (biometricData, journalEntry) {
+                    selectedBiometricData.value = biometricData;
+                    selectedEntry.value = journalEntry;
+                  },
                 ),
                 ChartSectionWidget(
                   title: 'Steps',
@@ -111,18 +130,10 @@ class LoadedContentWidget extends HookWidget {
                   journalEntries: journalEntries,
                   selectedRange: selectedRange,
                   showLargeDataset: showLargeDataset,
-                  onTooltipChanged: (date) => selectedDate.value = date,
-                  selectedDate: selectedDate.value,
-                ),
-                ChartSectionWidget(
-                  title: 'Sleep Score',
-                  metric: ChartMetric.sleepScore,
-                  biometricData: biometricData,
-                  journalEntries: journalEntries,
-                  selectedRange: selectedRange,
-                  showLargeDataset: showLargeDataset,
-                  onTooltipChanged: (date) => selectedDate.value = date,
-                  selectedDate: selectedDate.value,
+                  onTooltipChanged: (biometricData, journalEntry) {
+                    selectedBiometricData.value = biometricData;
+                    selectedEntry.value = journalEntry;
+                  },
                 ),
               ],
             ),

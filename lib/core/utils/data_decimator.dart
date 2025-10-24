@@ -12,9 +12,6 @@ enum ChartMetric {
 
   /// The steps metric.
   steps,
-
-  /// The sleep score metric.
-  sleepScore,
 }
 
 /// A class that represents the data decimator.
@@ -199,8 +196,6 @@ class DataDecimator {
         return data.rhr.toDouble();
       case ChartMetric.steps:
         return data.steps.toDouble();
-      case ChartMetric.sleepScore:
-        return data.sleepScore.toDouble();
     }
   }
 
